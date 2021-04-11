@@ -7,7 +7,7 @@ class Station
   end
   
   def get_trains
-    return @trains
+    @trains
   end
   
   def get_trains_by_type
@@ -19,7 +19,7 @@ class Station
         type_count[train.type] = 1
       end
     end
-    return type_count
+    type_count
   end 
   
   def arrive_train(train)
@@ -48,6 +48,6 @@ class Station
   end
   
   def to_s
-    return "Station #{@name}"
+    "Station #{@name}"
   end 
 end

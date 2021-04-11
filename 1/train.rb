@@ -68,6 +68,6 @@ class Train
   end
   
   def to_s
-    return "Train #{@num}, type: #{@type}, cars: #{@car_count}"
+    "Train #{@num}, type: #{@type}, cars: #{@car_count}"
   end 
 end

@@ -1,7 +1,5 @@
 class Route
   attr_reader :start_st
-  # vremenno
-  attr_reader :between_st
 
   def initialize(start_st, end_st)
     @start_st = start_st
@@ -62,6 +60,6 @@ class Route
   end
 
   def to_s
-    return "Route #{@start_st} - #{@end_st}"
+    "Route #{@start_st} - #{@end_st}"
   end
 end
