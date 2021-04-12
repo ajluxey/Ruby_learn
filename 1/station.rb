@@ -44,8 +44,4 @@ class Station
   def to_s
     "Station #{@name}"
   end
-
-  def inspect
-    return self.to_s
-  end
 end
