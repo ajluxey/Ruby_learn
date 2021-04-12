@@ -8,14 +8,14 @@ class Route
   end
   
   def add_station(station)
-    if @between_st.include? station or @start_st == station or @end_st == station
+    if self.all_stations.include? station
       return
     end 
     @between_st << station
   end 
   
   def delete_station(station)
-    if not station.is_a? Station or not @between_st.include? station or @start_st == station or @end_st == station
+    unless @between_st.include? station
       return
     end
     @between_st.delete(station)

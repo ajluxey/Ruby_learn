@@ -29,11 +29,11 @@ class Train
   end
 
   def next_station
-    return @direction? self.get_route_details[-1] : self.get_route_details[0]
+    return @direction? @route.next_station : @route.previous_station
   end
 
   def previous_station
-    return @direction? self.get_route_details[0] : self.get_route_details[1]
+    return @direction? @route.previous_station : @route.next_station
   end
   
   def set_direction(direction)
