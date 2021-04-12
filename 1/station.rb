@@ -23,7 +23,7 @@ class Station
   end 
   
   def arrive_train(train)
-    if not train.is_a? Train or not train.has_route?
+    unless train.has_route?
       return 
     end 
     train.stop
@@ -31,23 +31,21 @@ class Station
     train.set_station(self)
   end
 
-  def dispatch_train(train, direction)
-    if direction != 'forward' and direction != 'backward'
-      return
-    end
-    if not train.is_a? Train or not @trains.include? train
+  def dispatch_train(train)
+    unless @trains.include? train
       return 
     end
-    tr_next_st = train.next_station(self, direction)
-    if tr_next_st
-      train.accelerate
-      train.set_station(nil)
-      tr_next_st.arrive_train(train)
+    if train.get_route_details[-1]  # do if next station is not nil
+      train.run
       @trains.delete(train)
     end
   end
   
   def to_s
     "Station #{@name}"
-  end 
+  end
+
+  def inspect
+    return self.to_s
+  end
 end

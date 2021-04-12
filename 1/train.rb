@@ -11,28 +11,39 @@ class Train
     @speed = 0
     @route = nil 
     @on_station = nil
+    @direction = true   # true => forward, false => backward
   end 
   
   def has_route?
-    not @route.nil?
+    !@route.nil?
   end
   
-  def accelerate
+  def run
     @speed = 80
-  end 
-  
+    next_station = self.next_station
+    next_station.arrive_train(self)
+  end
+
   def stop
     @speed = 0
   end
 
-  def next_station(from, direction)
-    if direction == 'forward'
-      return @route.next_station(from)
-    elsif direction == 'backward'
-      return @route.previous_station(from)
-    end    
+  def next_station
+    return @direction? self.get_route_details[-1] : self.get_route_details[0]
+  end
+
+  def previous_station
+    return @direction? self.get_route_details[0] : self.get_route_details[1]
   end
   
+  def set_direction(direction)
+    if direction == 'forward'
+      @direction = true
+    elsif direction == 'backward'
+      @direction = false
+    end
+  end
+
   def add_car
     @car_count += 1
   end 
@@ -44,26 +55,19 @@ class Train
   end 
   
   def set_route(route)
-    if route.is_a? Route
-      @route = route
-      @route.start_st.arrive_train(self)
-    end
+    @route = route
+    @route.start_st.arrive_train(self)
   end
   
   def set_station(station)
-    if station.is_a? Station or station.nil?
+    if station.is_a? Station
       @on_station = station
     end
   end
 
   def get_route_details
-    if self.has_route? or @on_station.nil?
-      puts "Train route details:"
-      puts "previous station is #{@route.previous_station(@on_station)}"
-      puts "on station is #{@on_station}"
-      puts "next station is #{@route.next_station(@on_station)}"
-    else 
-      puts "this train doesn't have route or not on station"
+    if self.has_route? and @on_station
+      return [@route.previous_station(@on_station), @on_station, @route.next_station(@on_station)]
     end
   end
   
