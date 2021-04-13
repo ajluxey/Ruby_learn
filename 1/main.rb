@@ -22,6 +22,13 @@ def test
     station.dispatch_train(train)
   end
 
+  puts "Trains on station"
+  stations.each do |station|
+    puts station
+    puts station.get_trains
+    puts station.trains_by('gruz')
+  end
+
   puts 'Delete Station 4'
   route.delete_station(stations[3])
   stations.delete_at(3)

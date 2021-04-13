@@ -19,7 +19,7 @@ class Station
         type_trains[train.type] = [train]
       end
     end
-    
+    type_trains[type]
   end 
   
   def arrive_train(train)
@@ -29,8 +29,8 @@ class Station
   end
 
   def dispatch_train(train)
-    return if @trains.include? train
-    if train.next_station  # do if next station is not nil
+    return unless @trains.include? train
+    if train.next_station
       train.run
       @trains.delete(train)
     end

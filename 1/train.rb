@@ -20,8 +20,7 @@ class Train
   
   def run
     @speed = 80
-    next_station = self.next_station
-    next_station.arrive_train(self)
+    self.next_station.arrive_train(self)
   end
 
   def stop
@@ -29,11 +28,11 @@ class Train
   end
 
   def next_station
-    @direction? @route.next_station(@on_station) : @route.previous_station(@on_station)
+    @route.next_station(@on_station)
   end
 
   def previous_station
-    @direction? @route.previous_station(@on_station) : @route.next_station(@on_station)
+    @route.previous_station(@on_station)
   end
 
   def add_car
