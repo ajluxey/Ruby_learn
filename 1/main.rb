@@ -16,7 +16,7 @@ def test
 
   puts "\nEvery station dispatch train and fifth too"
   puts "#{train} route details"
-  puts train.get_route_details.inspect
+  puts [train.previous_station, train.on_station, train.next_station]
   stations.each do |station|
     puts "\n\n#{station} dispatch train\n"
     station.dispatch_train(train)
@@ -29,23 +29,14 @@ def test
   puts "All stations in #{route}"
   puts route.all_stations
 
-  train.set_direction('backward')
-  
-  puts "\nEvery station dispatch train backward and first too"
-  stations.reverse_each do |station|
-    puts "\n#{station} dispatch train\n"
-    station.dispatch_train(train)
-    train.get_route_details
-  end
-
-  # puts stations[0].get_trains
-  # puts stations[0].get_trains_by_type
-  # puts train
-  # train.add_car
-  # puts train
-  # puts train.speed
-  # (1..10).each { train.remove_car }
-  # puts train
+  puts stations[0].get_trains
+  puts stations[0].trains_by('gruz')
+  puts train
+  train.add_car
+  puts train
+  puts train.speed
+  (1..10).each { train.remove_car }
+  puts train
 end
 
 

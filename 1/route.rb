@@ -8,22 +8,15 @@ class Route
   end
   
   def add_station(station)
-    if self.all_stations.include? station
-      return
-    end 
-    @between_st << station
+    @between_st << station unless self.all_stations.include? station
   end 
   
   def delete_station(station)
-    unless @between_st.include? station
-      return
-    end
-    @between_st.delete(station)
+    @between_st.delete(station) if @between_st.include? station
   end 
 
   def all_stations
-    tmp = @between_st.clone
-    tmp.insert(0, @start_st) << @end_st
+    [@start_st, *@between_st, @end_st]
   end
 
   def next_station(from)
@@ -32,9 +25,7 @@ class Route
   end
   
   def previous_station(from)
-    if from == @start_st
-      return
-    end
+    return if from == @start_st
     all_stations = self.all_stations
     all_stations[all_stations.index(from) - 1]
   end

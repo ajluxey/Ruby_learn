@@ -10,32 +10,27 @@ class Station
     @trains
   end
   
-  def get_trains_by_type
-    type_count = {}
+  def trains_by(type)
+    type_trains = {}
     @trains.each do |train|
-      if type_count.include? train.type
-        type_count[train.type] += 1
+      if type_trains.include? train.type
+        type_trains[train.type] << train
       else 
-        type_count[train.type] = 1
+        type_trains[train.type] = [train]
       end
     end
-    type_count
+    
   end 
   
   def arrive_train(train)
-    unless train.has_route?
-      return 
-    end 
     train.stop
     @trains << train
     train.set_station(self)
   end
 
   def dispatch_train(train)
-    unless @trains.include? train
-      return 
-    end
-    if train.get_route_details[-1]  # do if next station is not nil
+    return if @trains.include? train
+    if train.next_station  # do if next station is not nil
       train.run
       @trains.delete(train)
     end

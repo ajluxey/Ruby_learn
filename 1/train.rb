@@ -3,6 +3,7 @@ class Train
   attr_reader :type 
   attr_reader :car_count
   attr_reader :speed
+  attr_reader :on_station
   
   def initialize(num, type, car_count)
     @num = num
@@ -11,7 +12,6 @@ class Train
     @speed = 0
     @route = nil 
     @on_station = nil
-    @direction = true   # true => forward, false => backward
   end 
   
   def has_route?
@@ -29,19 +29,11 @@ class Train
   end
 
   def next_station
-    return @direction? @route.next_station(@on_station) : @route.previous_station(@on_station)
+    @direction? @route.next_station(@on_station) : @route.previous_station(@on_station)
   end
 
   def previous_station
-    return @direction? @route.previous_station(@on_station) : @route.next_station(@on_station)
-  end
-  
-  def set_direction(direction)
-    if direction == 'forward'
-      @direction = true
-    elsif direction == 'backward'
-      @direction = false
-    end
+    @direction? @route.previous_station(@on_station) : @route.next_station(@on_station)
   end
 
   def add_car
@@ -49,9 +41,7 @@ class Train
   end 
   
   def remove_car
-    if @car_count >= 1
-      @car_count -= 1
-    end 
+    @car_count -= 1 if @car_count >= 1
   end 
   
   def set_route(route)
@@ -60,17 +50,9 @@ class Train
   end
   
   def set_station(station)
-    if station.is_a? Station
-      @on_station = station
-    end
+    @on_station = station
   end
 
-  def get_route_details
-    if self.has_route? and @on_station
-      return [@route.previous_station(@on_station), @on_station, @route.next_station(@on_station)]
-    end
-  end
-  
   def to_s
     "Train #{@num}, type: #{@type}, cars: #{@car_count}"
   end 
