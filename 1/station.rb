@@ -1,13 +1,10 @@
 class Station
   attr_reader :name
+  attr_reader :trains
   
   def initialize(name)
     @name = name
     @trains = []
-  end
-  
-  def get_trains
-    @trains
   end
   
   def trains_by(type)
@@ -23,7 +20,6 @@ class Station
   end 
   
   def arrive_train(train)
-    train.stop
     @trains << train
     train.set_station(self)
   end
@@ -31,7 +27,6 @@ class Station
   def dispatch_train(train)
     return unless @trains.include? train
     if train.next_station
-      train.run
       @trains.delete(train)
     end
   end

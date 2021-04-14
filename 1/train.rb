@@ -18,13 +18,21 @@ class Train
     !@route.nil?
   end
   
-  def run
+  def run(to_station)
+    @on_station.dispatch_train(self)
     @speed = 80
-    self.next_station.arrive_train(self)
+    @speed = 0
+    to_station.arrive_train(self)
   end
 
-  def stop
-    @speed = 0
+  def run_forward
+    next_st = self.next_station
+    self.run(next_st) if next_station
+  end
+
+  def run_backward
+    prev_st = self.previous_station
+    self.run(prev_st) if prev_st
   end
 
   def next_station
