@@ -22,14 +22,12 @@ class Route
   end
 
   def next_station(from)
-    all_stations = self.all_stations
     all_stations[all_stations.index(from) + 1]
   end
 
   def previous_station(from)
     return if from == @start_st
 
-    all_stations = self.all_stations
     all_stations[all_stations.index(from) - 1]
   end
 

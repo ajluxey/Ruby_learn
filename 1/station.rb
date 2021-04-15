@@ -9,15 +9,7 @@ class Station
   end
 
   def trains_by(type)
-    type_trains = {}
-    @trains.each do |train|
-      if type_trains.include? train.type
-        type_trains[train.type] << train
-      else
-        type_trains[train.type] = [train]
-      end
-    end
-    type_trains[type]
+    @trains.filter { |train| train.type == type }
   end
 
   def arrive_train(train)

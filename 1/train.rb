@@ -8,8 +8,6 @@ class Train
     @type = type
     @car_count = car_count >= 0 ? car_count : 0
     @speed = 0
-    @route = nil
-    @on_station = nil
   end
 
   def has_route?
@@ -24,13 +22,11 @@ class Train
   end
 
   def run_forward
-    next_st = next_station
-    run(next_st) if next_station
+    run(next_station) if next_station
   end
 
   def run_backward
-    prev_st = previous_station
-    run(prev_st) if prev_st
+    run(previous_station) if previous_station
   end
 
   def next_station
