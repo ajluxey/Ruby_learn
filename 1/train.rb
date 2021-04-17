@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Train
-  attr_reader :name, :speed, :on_station, :carriages
+  attr_reader :name, :speed, :on_station, :carriages, :type
   MAX_SPEED = 80
 
-  def initialize(num)
+  def initialize(num, type)
     @num = num
+    @type = type
     @carriages = []
     @speed = 0
   end
@@ -15,7 +16,7 @@ class Train
   end
 
   def car_count
-    @carriagess.size
+    @carriages.size
   end
 
   def run_forward       # Общий, чтобы осуществлять управление поездом
@@ -27,16 +28,18 @@ class Train
   end
 
   def next_station      # Общий, чтобы узнавать детали маршрута
-    @route.next_station(@on_station)
+    @route.next_station(@on_station) if @route
   end
 
   def previous_station  # Общий, чтобы узнавать детали маршрута
-    @route.previous_station(@on_station)
+    @route.previous_station(@on_station) if @route
   end
 
   def add_car(car)      # Общий, чтобы любой мог добавить
-    car.bound_to(self)
-    @carriages << car
+    if car.type == self.type
+      car.bound_to(self)
+      @carriages << car
+    end
   end
 
   def remove_car(car)   # Общий, чтобы любой мог удалить
@@ -56,7 +59,7 @@ class Train
   end
 
   def to_s
-    "Train #{@num}, carriages: #{@carriages}"
+    "Train #{@num}, type: #{@type}, carriages: #{@carriages}"
   end
 
   private

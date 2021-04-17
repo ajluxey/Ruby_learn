@@ -13,7 +13,7 @@ class Route
     @between_st << station unless all_stations.include? station
   end
 
-  def delete_station(station)
+  def delete_station(station)   # if delete check trains on station. if station has trains each train.route = nil
     @between_st.delete(station) if @between_st.include? station
   end
 

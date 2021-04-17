@@ -3,7 +3,7 @@ require_relative 'cargo_carriage'
 
 
 class CargoTrain < Train
-  def add_car(car)
-    super(car) if car.is_a? CargoCarriage
+  def initialize(num)
+    super(num, 'cargo')
   end
 end

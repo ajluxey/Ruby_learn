@@ -9,7 +9,7 @@ class Station
   end
 
   def trains_by(type)
-    @trains.filter { |train| train.class == type }
+    @trains.filter { |train| train.type == type }
   end
 
   def arrive_train(train)

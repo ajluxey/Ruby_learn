@@ -1,8 +1,8 @@
 class Carriage
-  attr_reader :is_bound
-  attr_reader :on_train
+  attr_reader :is_bound, :on_train, :type
 
-  def initialize
+  def initialize(type)
+    @type = type
     @is_bound = false
   end
 
@@ -14,6 +14,10 @@ class Carriage
   def unbound
     @on_train = nil
     @is_bound = false
+  end
+
+  def to_s
+    "#{@type} carriage"
   end
 
   def inspect
