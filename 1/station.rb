@@ -24,6 +24,6 @@ class Station
   end
 
   def to_s
-    "Station #{@name}"
+    "Station #{@name} with trains #{trains}"
   end
 end

@@ -62,6 +62,10 @@ class Train
     "Train #{@num}, type: #{@type}, carriages: #{@carriages}"
   end
 
+  def inspect
+    to_s
+  end
+
   private
 
   def run(to_station)                   # Приватный, потому что достаточно сильный и может посылать на

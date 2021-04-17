@@ -235,11 +235,11 @@ class RailwayTest
   end
 
   def print_objects
-    puts "Stations:"
+    puts "\nStations:"
     puts @stations
-    puts "Trains:"
+    puts "\nTrains:"
     puts @trains
-    puts "Routes:"
+    puts "\nRoutes:"
     puts @routes
   end    
 end
