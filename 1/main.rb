@@ -1,50 +1,204 @@
-load './route.rb'
+load './passenger_train.rb'
+load './cargo_train.rb'
 load './station.rb'
-load './train.rb'
+load './route.rb'
 
 
-def print_stations_of(train)
-  puts "#{train}"
-  puts [train.previous_station, train.on_station, train.next_station]
+$trains = []
+$routes = []
+$stations = []
+
+
+def draw_menu(points)
+  points.each_with_index do |point, index|
+    puts "#{(index + 1).to_s}. #{point}"
+  end
 end
 
-def test
-  stations = (1..5).map { |i| Station.new(i.to_s) }
-  route = Route.new(stations[0], stations[4])
-  stations[1..3].each do |station|
-    route.add_station(station)
-  end
-  puts "All stations in #{route}"
-  puts route.all_stations
-  train = Train.new('14', 'gruz', 5)
-  train.set_route(route)
 
-  train2 = Train.new('11', 'gruz', 10)
-  train3 = Train.new('18', 'pass', 8)
-  train2.set_route(route)
-  train3.set_route(route)
-  puts stations[0].trains
-  puts stations[0].trains_by('gruz')
-  (1..5).each do |i|
-    train3.run_forward
-    if i < 3
-      train2.run_forward
+def menu(points)
+  draw_menu(points)
+  point = gets.chomp.to_i
+  unless (1..points.size).include? point
+    puts 'Неверное значение, попробуйте снова'
+    return menu(points)
+  else
+    return point
+  end
+end
+
+
+def main_menu
+  menu_points = ['Создать', 'Обновить и использовать методы', 'Объекты', 'Выйти']
+  action = menu(menu_points)
+  case action
+  when 1
+    create_object
+  when 2
+    update_object
+  when 3
+    print_objects
+  when 4
+    return
+  else
+    puts 'eбала какая-то'
+  end
+  main_menu
+end
+
+
+def create_object
+  menu_points = ["Станция", "Поезд", "Маршрут"]
+  obj = menu(menu_points)
+  case obj
+  when 1
+    create_station
+  when 2
+    create_train
+  when 3
+    create_route
+  end
+end
+
+
+def create_station
+  puts "Введите имя станции"
+  name = gets.chomp
+  $stations << Station.new(name)
+  $stations[-1]
+end
+
+def create_train
+  train_class = ["Пассажирский", "Грузовой"]
+  train_class = menu(train_class)
+  puts "Введите номер поезда:"
+  num = gets.chomp
+  if train_class == 1
+    $trains << PassengerTrain.new(num)
+  else
+    $trains << CargoTrain.new(num)
+  end
+  $trains[-1]
+end
+
+
+def create_route
+  return if $stations.size < 2
+  puts "Выберите начальную станцию"
+  indx = menu($stations)
+  start_st = $stations[indx - 1]
+  tmp_stations = $stations - [start_st]
+  puts "Выберите конечную станцию"
+  indx = menu(tmp_stations)
+  end_st = tmp_stations[indx-1]
+  $routes << Route.new(start_st, end_st)
+  $routes[-1]
+end
+
+
+def update_object
+  menu_points = ["Поезд", "Маршрут"]
+  obj = menu(menu_points)
+  case obj
+  when 1
+    if $trains.empty?
+      puts "Нет поездов"
+    else
+      update_train
     end
-  end
-
-  stations.each do |station|
-    puts station
-    puts "train on station"
-    puts station.trains
-    puts
-    puts "train on station by type: gruz"
-    puts station.trains_by('gruz')
-    puts
-    puts "train on station by type: pass"
-    puts station.trains_by('pass')
-    puts
+  when 2
+    if $routes.empty?
+      puts "Нет маршрутов"
+    else
+      update_route
+    end  
   end
 end
 
 
-test
+def update_train
+  puts "Выберите нужный:"
+  train = $trains[menu($trains) - 1]
+  menu_points = ["Задать маршрут", "Информация", "Отправить вперед", "Отправить назад", "Добавить вагон", "Отцепить вагон"]
+  act = menu(menu_points)
+  case act
+  when 1
+    if $routes.empty?
+      puts "Маршрутов нет"
+    else
+      puts "Выберите маршрут из списка"
+      route = $routes[menu($routes) - 1]
+      train.set_route(route)
+    end
+  when 2
+    if train.has_route?
+      puts [train.previous_station, train.on_station, train.next_station]
+    else
+      puts "Поезд не имеет маршрута, информация недоступна"
+    end
+  when 3
+    if train.has_route?
+      if train.next_station
+        train.run_forward
+      else
+        puts "Движение вперед невозможно"
+      end 
+    else
+      puts "Поезд не имеет маршрута, движение невозможно"
+    end
+  when 4
+    if train.has_route?
+      if train.previous_station
+        train.run_backward
+      else
+        puts "Движение назад невозможно"
+      end 
+    else
+      puts "Поезд не имеет маршрута, движение невозможно"
+    end
+  when 5
+    if train.is_a? PassengerTrain
+      train.add_car(PassengerCarriage.new)
+    else
+      train.add_car(CargoCarriage.new)
+    end
+  when 6
+    train.remove_car(train.carriages[-1])
+  end
+end
+
+
+def update_route
+  puts "Выберите нужный:"
+  route = $routes[menu($routes) - 1]
+  menu_points = ["Вывести все станции", "Добавить станцию", "Удалить станцию"]
+  act = menu(menu_points)
+  case act
+  when 1
+    puts route.all_stations
+  when 2
+    stations = $stations - route.all_stations
+    if stations.size == 0
+      puts "Нет свободных станций, создайте новую"
+      station_to_add = create_station
+    else
+      station_to_add = stations[menu(stations) - 1]
+    end
+    route.add_station(station_to_add)
+  when 3
+    stations = route.all_stations
+    route.delete(stations[menu(stations) - 1])
+  end
+end
+
+def print_objects
+  puts "Stations:"
+  puts $stations
+  puts "Trains:"
+  puts $trains
+  puts "Routes:"
+  puts $routes
+end
+
+
+main_menu
