@@ -42,6 +42,8 @@ class RailwayTest
     run
   end
 
+  private
+
   def draw_menu(points)
     points.each_with_index do |point, index|
       puts "#{(index + 1).to_s}. #{point}"

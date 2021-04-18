@@ -11,11 +11,11 @@ class Train
     @speed = 0
   end
 
-  def has_route?
+  def has_route?        # Общий, чтобы смотреть есть ли у поезда маршрут
     !@route.nil?
   end
 
-  def car_count
+  def car_count         # Общий по заданию
     @carriages.size
   end
 
@@ -36,17 +36,11 @@ class Train
   end
 
   def add_car(car)      # Общий, чтобы любой мог добавить
-    if car.type == self.type
-      car.bound_to(self)
-      @carriages << car
-    end
+    @carriages << car if car.type == self.type
   end
 
   def remove_car(car)   # Общий, чтобы любой мог удалить
-    if car_count
-      @carriages.delete(car)
-      car.unbound
-    end
+    @carriages.delete(car) if car_count
   end
 
   def set_route(route)  # Общий, потому что задается извне
