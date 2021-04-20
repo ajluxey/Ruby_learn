@@ -9,23 +9,23 @@ class Route
     @between_st = []
   end
 
-  def add_station(station)
+  def add_station(station)      # Общий, потому что любой может добавлять станции 
     @between_st << station unless all_stations.include? station
   end
 
-  def delete_station(station)
+  def delete_station(station)   # Общий, потому что любой может удалять станции
     @between_st.delete(station) if @between_st.include? station
   end
 
-  def all_stations
+  def all_stations              # Общий, потому что любой может посмотреть станции
     [@start_st, *@between_st, @end_st]
   end
 
-  def next_station(from)
+  def next_station(from)        # Общий, потому что поезд вызывает этот метод для того чтобы узнать свою следуюзую станцию
     all_stations[all_stations.index(from) + 1]
   end
 
-  def previous_station(from)
+  def previous_station(from)    # Общий, логика та же что и метода у next_station
     return if from == @start_st
 
     all_stations[all_stations.index(from) - 1]
