@@ -1,23 +1,39 @@
 # frozen_string_literal: true
 
+require_relative 'company'
+require_relative 'instance_counter'
+
 class Station
   attr_reader :name, :trains
+
+  include InstanceCounter
+
+  @@created_instances = []
+
+  def self.all
+    @@created_instances
+  end
 
   def initialize(name)
     @name = name
     @trains = []
+    @@created_instances << self
+    register_instance
   end
 
-  def trains_by(type)       # Общий по заданию
+  # Общий по заданию
+  def trains_by(type)
     @trains.filter { |train| train.type == type }
   end
 
-  def arrive_train(train)   # Общий, потому что поезд при приближении к станции использует этот метод
+  # Общий, потому что поезд при приближении к станции использует этот метод
+  def arrive_train(train)
     @trains << train
     train.set_station(self)
   end
 
-  def dispatch_train(train)               # Общий, потому что поезд использует его при отправлении
+  # Общий, потому что поезд использует его при отправлении
+  def dispatch_train(train)
     return unless @trains.include? train
 
     @trains.delete(train) if train.next_station

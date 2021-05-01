@@ -1,31 +1,41 @@
 # frozen_string_literal: true
 
+require_relative 'instance_counter'
+
 class Route
   attr_reader :start_st
+
+  include InstanceCounter
 
   def initialize(start_st, end_st)
     @start_st = start_st
     @end_st = end_st
     @between_st = []
+    register_instance
   end
 
-  def add_station(station)      # Общий, потому что любой может добавлять станции 
+  # Общий, потому что любой может добавлять станции
+  def add_station(station)
     @between_st << station unless all_stations.include? station
   end
 
-  def delete_station(station)   # Общий, потому что любой может удалять станции
+  # Общий, потому что любой может удалять станции
+  def delete_station(station)
     @between_st.delete(station) if @between_st.include? station
   end
 
-  def all_stations              # Общий, потому что любой может посмотреть станции
+  # Общий, потому что любой может посмотреть станции
+  def all_stations
     [@start_st, *@between_st, @end_st]
   end
 
-  def next_station(from)        # Общий, потому что поезд вызывает этот метод для того чтобы узнать свою следуюзую станцию
+  # Общий, потому что поезд вызывает этот метод для того чтобы узнать свою следуюзую станцию
+  def next_station(from)
     all_stations[all_stations.index(from) + 1]
   end
 
-  def previous_station(from)    # Общий, логика та же что и метода у next_station
+  # Общий, логика та же что и метода у next_station
+  def previous_station(from)
     return if from == @start_st
 
     all_stations[all_stations.index(from) - 1]
