@@ -6,6 +6,7 @@ require_relative 'instance_counter'
 class Train
   attr_reader :num, :speed, :on_station, :carriages, :type
 
+  NUMBER_REGEXP = /^[a-z\d]{3}-?[a-z]{2}$/i
   MAX_SPEED = 80
   include Company
   include InstanceCounter
@@ -30,8 +31,16 @@ class Train
     @type = type
     @carriages = []
     @speed = 0
+    validate!
     @@train_instances << self
     register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   # Общий, чтобы смотреть есть ли у поезда маршрут
@@ -86,11 +95,18 @@ class Train
   end
 
   def to_s
-    "Train #{@num}, type: #{@type}, carriages: #{@carriages}"
+    "Train #{@num}, type: #{@type}, carriages: #{@carriages.length}"
   end
 
   def inspect
     to_s
+  end
+
+  protected
+
+  def validate!
+    raise 'Неправильный номер поезда. Номер может состаять из 3 английских букв или цифр, необязательного дефиса и двух английских букв' if @num.match(NUMBER_REGEXP).nil?
+    raise "Невозможный тип поезда. Тип поезда должен быть 'cargo' или 'passenger'" if !['cargo', 'passenger'].include?(@type)
   end
 
   private

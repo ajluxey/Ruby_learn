@@ -17,9 +17,17 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     @@created_instances << self
     register_instance
   end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end 
 
   # Общий по заданию
   def trains_by(type)
@@ -41,5 +49,11 @@ class Station
 
   def to_s
     "Station #{@name} with trains #{trains}"
+  end
+
+  private
+
+  def validate!
+    raise TypeError.new 'Название станции должно быть строкой' if !@name.instance_of?(String)
   end
 end
