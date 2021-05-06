@@ -73,6 +73,12 @@ class Train
     @route&.previous_station(@on_station)
   end
 
+  def for_each_car
+    carriages.each do |car|
+      yield car
+    end
+  end
+  
   # Общий, чтобы любой мог добавить
   def add_car(car)
     @carriages << car if car.type == type

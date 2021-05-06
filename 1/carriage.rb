@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'company'
+
+
 class Carriage
   attr_reader :type
 
