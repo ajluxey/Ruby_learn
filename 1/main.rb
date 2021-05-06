@@ -26,8 +26,8 @@ class RailwayTest
       @routes[-1].add_station(station)
     end
 
-    p_train = PassengerTrain.new('14')
-    c_train = CargoTrain.new('08')
+    p_train = PassengerTrain.new('BB8-SW')
+    c_train = CargoTrain.new('SIM-BA')
     @trains << p_train << c_train
 
     c_train.set_route(@routes[-1])
@@ -101,12 +101,18 @@ class RailwayTest
   def create_train
     train_class = ["Пассажирский", "Грузовой"]
     train_class = menu(train_class)
-    puts "Введите номер поезда:"
-    num = gets.chomp
-    if train_class == 1
-      @trains << PassengerTrain.new(num)
-    else
-      @trains << CargoTrain.new(num)
+    begin
+      puts "Введите номер поезда:"
+      num = gets.chomp
+      if train_class == 1
+        @trains << PassengerTrain.new(num)
+      else
+        @trains << CargoTrain.new(num)
+      end
+    rescue RuntimeError => e
+      puts e
+      puts 'Попробуйте еще раз'
+      retry
     end
     @trains[-1]
   end
@@ -247,4 +253,5 @@ class RailwayTest
 end
 
 
+# RailwayTest.new.run
 RailwayTest.new.run_with_seed

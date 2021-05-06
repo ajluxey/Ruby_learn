@@ -11,7 +11,15 @@ class Route
     @start_st = start_st
     @end_st = end_st
     @between_st = []
+    validate!
     register_instance
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   # Общий, потому что любой может добавлять станции
@@ -43,5 +51,12 @@ class Route
 
   def to_s
     "Route #{@start_st} - #{@end_st}"
+  end
+
+  private
+  
+  def validate!
+    raise TypeError.new 'Начальная станция должна быть объектом типа Station' if !@start_st.instance_of?(Station)
+    raise TypeError.new 'Конечная станция должна быть объектом типа Station' if !@end_st.instance_of?(Station)
   end
 end
