@@ -33,8 +33,8 @@ class RailwayTest
     c_train.set_route(@routes[-1])
     p_train.set_route(@routes[-1])
     
-    (1..rand(1..10)).each { c_train.add_car(CargoCarriage.new) }
-    (1..rand(1..10)).each { p_train.add_car(PassengerCarriage.new) }
+    (1..rand(1..10)).each { c_train.add_car(CargoCarriage.new(100)) }
+    (1..rand(1..10)).each { p_train.add_car(PassengerCarriage.new(60)) }
 
     (1..rand(1..(@stations.size - 1))).each { c_train.run_forward }
     (1..rand(1..(@stations.size - 1))).each { p_train.run_forward }
@@ -162,14 +162,15 @@ class RailwayTest
     act = menu(menu_points)
     case act
     when 1
-      puts station.trains
+      # puts station.trains
+      station.for_each_train {|train| puts train}
     end
   end
 
   def update_and_methods_of_train
     puts "Выберите нужный:"
     train = @trains[menu(@trains) - 1]
-    menu_points = ["Задать маршрут", "Информация", "Отправить вперед", "Отправить назад", "Добавить вагон", "Отцепить вагон"]
+    menu_points = ["Задать маршрут", "Информация", "Отправить вперед", "Отправить назад", "Добавить вагон", "Отцепить вагон", "Информация о вагонах"]
     act = menu(menu_points)
     case act
     when 1
@@ -210,13 +211,39 @@ class RailwayTest
       end
     when 5
       if train.is_a? PassengerTrain
-        train.add_car(PassengerCarriage.new)
+        add_pass_car(train)
       else
-        train.add_car(CargoCarriage.new)
+        add_cargo_car(train)
       end
     when 6
       train.remove_car(train.carriages[-1])
+    when 7
+      i = 1
+      train.for_each_car do |car|
+        puts "№#{i}: #{car}"
+        i += 1
+      end
     end
+  end
+
+  def add_pass_car(train)
+    puts "Введите количество мест:"
+    n = gets.chomp.to_i
+    puts "Введите количество занятых мест:"
+    oc = gets.chomp.to_i
+    car = PassengerCarriage.new(n)
+    oc.times {car.take_the_seat}
+    train.add_car(car)
+  end
+
+  def add_cargo_car(train)
+    puts "Введите вместимость:"
+    v = gets.chomp.to_i
+    puts "Введите заполненность:"
+    fv = gets.chomp.to_i
+    car = CargoCarriage.new(v)
+    car.fill(fv)
+    train.add_car(car)
   end
 
   def update_and_methods_of_route

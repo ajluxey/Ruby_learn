@@ -29,6 +29,12 @@ class Station
     false
   end 
 
+  def for_each_train
+    trains.each do |train|
+      yield train
+    end
+  end
+
   # Общий по заданию
   def trains_by(type)
     @trains.filter { |train| train.type == type }
