@@ -40,13 +40,6 @@ class Train
     register_instance
   end
 
-  # def valid?
-  #   validate!
-  #   true
-  # rescue
-  #   false
-  # end
-
   # Общий, чтобы смотреть есть ли у поезда маршрут
   def has_route?
     !@route.nil?

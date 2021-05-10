@@ -21,13 +21,6 @@ class Route
     register_instance
   end
 
-  # def valid?
-    # validate!
-    # true
-  # rescue
-    # false
-  # end
-
   # Общий, потому что любой может добавлять станции
   def add_station(station)
     @between_st << station unless all_stations.include? station
@@ -58,11 +51,4 @@ class Route
   def to_s
     "Route #{@start_st} - #{@end_st}"
   end
-
-  # private
-  # 
-  # def validate!
-    # raise TypeError.new 'Начальная станция должна быть объектом типа Station' if !@start_st.instance_of?(Station)
-    # raise TypeError.new 'Конечная станция должна быть объектом типа Station' if !@end_st.instance_of?(Station)
-  # end
 end
