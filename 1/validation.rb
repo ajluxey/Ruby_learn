@@ -14,14 +14,28 @@ module Validation
       var_validators_name = "@var_validators".to_sym
       var_validators = instance_variable_get(var_validators_name)
       if var_validators.nil?
-        instance_variable_set(var_validators_name, {var_name => []})
+        instance_variable_set(var_validators_name, {})
         var_validators = instance_variable_get(var_validators_name)
       end
+      # if !var_validators.key? var_name
+      #   instance_variable_set(var_validators_name, {var_name => []})
+      #   var_validators = instance_variable_get(var_validators_name)
+      # end
+      var_validators[var_name] = [] if !var_validators.key? var_name
       var_validators[var_name] << [type, args.first] unless var_validators[var_name].include? [type, args.first]
     end   
   end
 
   module InstanceMethods
+    def valid?
+      validate!
+      true
+    rescue
+      false
+    end
+    
+    protected
+
     def validate!
       presence_val = Proc.new {|value|  raise "Presence validation" if value.nil? or value.empty?}
       format_val = Proc.new {|value, regexp| raise "Format validation" if value.match(regexp).nil?}
@@ -30,21 +44,20 @@ module Validation
                          :format => format_val,
                          :type => type_val}
 
-      self.class.instance_variable_get("@var_validators".to_sym).each do |var_name, validators|
+      class_with_info = self.class
+      while class_with_info.superclass != Object
+        class_with_info = class_with_info.superclass
+      end
+
+      # self.class
+      class_with_info.instance_variable_get("@var_validators".to_sym).each do |var_name, validators|
         begin
           value = instance_variable_get(var_name)
           validators.each {|validator, param| validation_func[validator].call(value, param)}
         rescue Exception => e
-          raise e.class.new e.message + " from #{var_name}"
+          raise e.message + " from #{var_name}"
         end
       end
-    end
-
-    def valid?
-      validate!
-      true
-    rescue
-      false
     end
   end
 end

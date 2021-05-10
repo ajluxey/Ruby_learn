@@ -2,11 +2,15 @@
 
 require_relative 'company'
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Station
   attr_reader :name, :trains
 
   include InstanceCounter
+  include Validation
+
+  validate :name, :presence
 
   @@created_instances = []
 
@@ -22,12 +26,12 @@ class Station
     register_instance
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end 
+  # def valid?
+  #   validate!
+  #   true
+  # rescue
+  #   false
+  # end 
 
   def for_each_train
     trains.each do |train|
@@ -57,9 +61,9 @@ class Station
     "Station #{@name} with trains #{trains}"
   end
 
-  private
+  # private
 
-  def validate!
-    raise TypeError.new 'Название станции должно быть строкой' if !@name.instance_of?(String)
-  end
+  # def validate!
+  #   raise TypeError.new 'Название станции должно быть строкой' if !@name.instance_of?(String)
+  # end
 end

@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 require_relative 'instance_counter'
+require_relative 'validation'
+require_relative 'station'
 
 class Route
   attr_reader :start_st
 
   include InstanceCounter
+  include Validation
+
+  validate :start_st, :type, Station
+  validate :end_st, :type, Station
 
   def initialize(start_st, end_st)
     @start_st = start_st
@@ -15,12 +21,12 @@ class Route
     register_instance
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end
+  # def valid?
+    # validate!
+    # true
+  # rescue
+    # false
+  # end
 
   # Общий, потому что любой может добавлять станции
   def add_station(station)
@@ -53,10 +59,10 @@ class Route
     "Route #{@start_st} - #{@end_st}"
   end
 
-  private
-  
-  def validate!
-    raise TypeError.new 'Начальная станция должна быть объектом типа Station' if !@start_st.instance_of?(Station)
-    raise TypeError.new 'Конечная станция должна быть объектом типа Station' if !@end_st.instance_of?(Station)
-  end
+  # private
+  # 
+  # def validate!
+    # raise TypeError.new 'Начальная станция должна быть объектом типа Station' if !@start_st.instance_of?(Station)
+    # raise TypeError.new 'Конечная станция должна быть объектом типа Station' if !@end_st.instance_of?(Station)
+  # end
 end
