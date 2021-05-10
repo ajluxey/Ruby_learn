@@ -16,9 +16,8 @@ module Validation
       if var_validators.nil?
         instance_variable_set(var_validators_name, {var_name => []})
         var_validators = instance_variable_get(var_validators_name)
-      else
-        var_validators[var_name] << [type, args.first] unless var_validators[var_name].include? [type, args.first]
       end
+      var_validators[var_name] << [type, args.first] unless var_validators[var_name].include? [type, args.first]
     end   
   end
 
