@@ -12,15 +12,13 @@ module Validation
 
       var_name = "@#{name}".to_sym
       var_validators_name = "@var_validators".to_sym
+      
       var_validators = instance_variable_get(var_validators_name)
       if var_validators.nil?
         instance_variable_set(var_validators_name, {})
         var_validators = instance_variable_get(var_validators_name)
       end
-      # if !var_validators.key? var_name
-      #   instance_variable_set(var_validators_name, {var_name => []})
-      #   var_validators = instance_variable_get(var_validators_name)
-      # end
+      
       var_validators[var_name] = [] if !var_validators.key? var_name
       var_validators[var_name] << [type, args.first] unless var_validators[var_name].include? [type, args.first]
     end   
