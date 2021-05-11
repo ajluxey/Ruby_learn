@@ -2,6 +2,7 @@
 
 require_relative 'company'
 require_relative 'instance_counter'
+require_relative 'validation'
 
 class Train
   attr_reader :num, :speed, :on_station, :carriages, :type
@@ -10,6 +11,9 @@ class Train
   MAX_SPEED = 80
   include Company
   include InstanceCounter
+  include Validation
+
+  validate :num, :format, NUMBER_REGEXP
 
   # Не очень понял насколько это правильно, ведь при наследовании @@ тоже наследуется.
   # Получается, что грузовой и пассажирский будут иметь общую переменную, это нормально?
@@ -34,13 +38,6 @@ class Train
     validate!
     @@train_instances << self
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   # Общий, чтобы смотреть есть ли у поезда маршрут
@@ -108,12 +105,12 @@ class Train
     to_s
   end
 
-  protected
+  # protected
 
-  def validate!
-    raise 'Неправильный номер поезда. Номер может состаять из 3 английских букв или цифр, необязательного дефиса и двух английских букв' if @num.match(NUMBER_REGEXP).nil?
-    raise "Невозможный тип поезда. Тип поезда должен быть 'cargo' или 'passenger'" if !['cargo', 'passenger'].include?(@type)
-  end
+  # def validate!
+    # raise 'Неправильный номер поезда. Номер может состаять из 3 английских букв или цифр, необязательного дефиса и двух английских букв' if @num.match(NUMBER_REGEXP).nil?
+    # raise "Невозможный тип поезда. Тип поезда должен быть 'cargo' или 'passenger'" if !['cargo', 'passenger'].include?(@type)
+  # end
 
   private
 
